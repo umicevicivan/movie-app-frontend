@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/discover"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Filter search</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="movies.length == 0" class="ion-padding ion-text-center">
+    <h1>:(</h1>
+    <h2>There are no results for your search parameters.</h2>
+  </div>
+  <ion-grid fixed>
+    <ion-row class="ion-text-center">
+      <ion-col
+        size="4"
+        *ngFor="let movie of movies"
+        [routerLink]="[ '/', 'tabs','discover','movie', movie.id ]"
+      >
+        <ion-img
+          class="border-radius"
+          [src]="imageBaseUrl + movie.poster_path"
+        ></ion-img>
+        <ion-label>
+          <p class="smovie-label">{{ movie.title }}</p>
+        </ion-label>    
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-infinite-scroll threshold="30%" (ionInfinite)="infScroll($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more movies..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar class="ion-text-center">
+      <ion-title
+        >{{ discoverMovies.total_results}}/{{
+        discoverMovies.total_results}}</ion-title
+      >
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

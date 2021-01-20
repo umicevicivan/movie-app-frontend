@@ -1,0 +1,20 @@
+.border-radius {
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+.smovie-label {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  color: white;
+  font-size: small;
+}
+
+.sticky {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0px;
+  z-index: 100000;
+  background-color: var(--ion-background-color);
+}
+ 

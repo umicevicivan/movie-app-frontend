@@ -1,0 +1,249 @@
+@mixin faded($offset, $blur-radius, $spread-radius) {
+  &.faded-left:after {
+    box-shadow: inset $offset 0 $blur-radius (-$spread-radius);
+  }
+
+  &.faded-right:after {
+    box-shadow: inset (-$offset) 0 $blur-radius (-$spread-radius);
+  }
+
+  &.faded-top:after {
+    box-shadow: inset 0 $offset $blur-radius (-$spread-radius);
+  }
+
+  &.faded-bottom:after {
+    box-shadow: inset 0 (-$offset) $blur-radius (-$spread-radius);
+  }
+
+  &.faded-left.faded-right:after {
+    box-shadow: inset $offset 0 $blur-radius (-$spread-radius),
+      inset (-$offset) 0 $blur-radius (-$spread-radius);
+  }
+
+  &.faded-left.faded-top:after {
+    box-shadow: inset $offset ($offset) $blur-radius (-$spread-radius);
+  }
+
+  &.faded-right.faded-bottom:after {
+    box-shadow: inset (-$offset) (-$offset) $blur-radius (-$spread-radius);
+  }
+
+  &.faded-top.faded-right:after {
+    box-shadow: inset (-$offset) $offset $blur-radius (-$spread-radius);
+  }
+
+  &.faded-top.faded-bottom:after {
+    box-shadow: inset 0 $offset $blur-radius (-$spread-radius),
+      inset 0 (-$offset) $blur-radius (-$spread-radius);
+  }
+
+  &.faded-left.faded-bottom:after {
+    box-shadow: inset $offset (-$offset) $blur-radius (-$spread-radius);
+  }
+
+  &.faded-top.faded-right.faded-bottom:after {
+    box-shadow: inset (-$offset/2) 0 $blur-radius $spread-radius;
+  }
+
+  &.faded-left.faded-right.faded-bottom:after {
+    box-shadow: inset 0 (-$offset/2) $blur-radius $spread-radius;
+  }
+
+  &.faded-left.faded-top.faded-bottom:after {
+    box-shadow: inset ($offset/2) 0 $blur-radius $spread-radius;
+  }
+
+  &.faded-left.faded-top.faded-right:after {
+    box-shadow: inset 0 ($offset/2) $blur-radius $spread-radius;
+  }
+
+  &.faded-all:after,
+  &.faded-left.faded-top.faded-right.faded-bottom:after {
+    box-shadow: inset 0 0 $blur-radius $spread-radius;
+  }
+}
+
+$faded-offset: 80px !default;
+$faded-blur-radius: 60px !default;
+$faded-spread-radius: 15px !default;
+
+$faded-narrow-offset: 20px !default;
+$faded-narrow-blur-radius: 20px !default;
+$faded-narrow-spread-radius: 10px !default;
+
+$faded-wide-offset: 80px !default;
+$faded-wide-blur-radius: 80px !default;
+$faded-wide-spread-radius: 28px !default;
+
+.faded {
+  position: relative;
+  display: inline-block;
+  color: #000000;
+
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-collapse: separate;
+  }
+
+  @include faded($faded-offset, $faded-blur-radius, $faded-spread-radius);
+
+  &.faded-narrow {
+    @include faded(
+      $faded-narrow-offset,
+      $faded-narrow-blur-radius,
+      $faded-narrow-spread-radius
+    );
+  }
+
+  &.faded-wide {
+    @include faded(
+      $faded-wide-offset,
+      $faded-wide-blur-radius,
+      $faded-wide-spread-radius
+    );
+  }
+}
+
+// Colored panel
+.panel {
+  background-color: blue;
+  padding: 1em;
+  color: white;
+
+  .faded {
+    // Use a text color the same as the background colour of the panel will mean the fade effect matches the backround correctly
+    color: blue;
+  }
+}
+
+// Scale images down if they're too large for available space
+img {
+  max-width: 100%;
+}
+
+.border-radius {
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+ion-toolbar {
+  --background: transparent;
+  --ion-color-base: transparent !important;
+}
+
+/* Show background if class is active */
+.show-background {
+  border-style: none;
+  background: var(--ion-background-color);
+}
+
+/* Remove bottom border on md */
+.header-md::after {
+  background-image: none;
+}
+
+/* Remove bottom border on ios */
+.header-ios ion-toolbar:last-child {
+  --border-width: 0;
+}
+
+.scroll-content {
+  padding-top: 0px !important;
+}
+
+ion-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.subtitle {
+  font-size: small;
+}
+
+.release-date {
+  font-size: small;
+  margin-top: 10px;
+}
+
+.director {
+  font-size: small;
+  margin-top: 10px;
+}
+.director-name{
+  color: rgb(209, 209, 209);
+}
+
+.rating-image-div {
+  float: left;
+  background-color: rgb(31, 28, 28);
+  border-radius: 10px;
+  height: 35px;
+  width: 35px;
+  margin-right: 10px;
+}
+
+.rating-image {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 25px;
+  margin-top: 25%;
+}
+
+.rating-image-imdb {
+  margin: auto;
+  display: block;
+  margin-top: 12px;
+  width: 25px;
+}
+.font-x-s {
+  font-size: x-small;
+}
+
+.rating-label-div {
+  padding-top: 5px;
+}
+
+ion-chip {
+  color: var(--ion-color-step-600, #666666);
+  border-color: var(--ion-color-step-600, #666666);
+  border-width: 2px;
+  padding: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.info-header {
+  color: var(--ion-color-step-600, #666666);
+  margin: 5px;
+  font-size: medium;
+}
+
+.info-content {
+  margin: 5px;
+  font-size: medium;
+}
+
+.smovie-label {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  color: white;
+  font-size: small;
+}
+
+.sticky {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 44px;
+  z-index: 100000;
+  background-color: var(--ion-background-color);
+}

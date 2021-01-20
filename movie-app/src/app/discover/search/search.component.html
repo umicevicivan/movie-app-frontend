@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" class="sbar-margin">
+      <ion-back-button defaultHref="/tabs/discover"></ion-back-button>
+    </ion-buttons>
+    <ion-searchbar
+      #searchbar
+      inputmode="text"
+      placeholder="Search movie by title"
+      (ionCancel)="onCancel()"
+      (ionChange)="onSearchChange($event)"
+      [debounce]="250"
+      showCancelButton="never"
+      class="sbar-margin"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding" class="ion-text-center" *ngIf="searchTermEmpty">
+    <h1>:(</h1>
+    <h2>Search term can't be empty</h2>
+  </div>
+  <ion-grid fixed *ngIf="!searchTermEmpty">
+    <!-- <p>{{ loadedDiscoverMoviesList.pages }}</p> -->
+    <ion-row class="ion-text-center">
+      <ion-col
+        size="4"
+        *ngFor="let movie of movies"
+        [routerLink]="['/', 'tabs', 'discover', 'movie', movie.id]"
+      >
+        <ion-img
+          *ngIf="movie.poster_path != null"
+          class="border-radius"
+          [src]="imageBaseUrl + movie.poster_path"
+        ></ion-img>
+        <ion-img
+          *ngIf="movie.poster_path == null"
+          class="border-radius"
+          src="../../../assets/icon/no-poster.png"
+        ></ion-img>
+
+        <ion-label>
+          <p class="smovie-label">{{ movie.title }}</p>
+        </ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
