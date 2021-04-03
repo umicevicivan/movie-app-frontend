@@ -1,6 +1,4 @@
-import { IPerson } from "../interfaces/person.interface";
-
-export class Person implements IPerson{
+export class Person{
     id: number;
     gender: number;
     known_for_department: string;

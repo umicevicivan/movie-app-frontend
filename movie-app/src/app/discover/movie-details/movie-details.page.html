@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar [class.show-background]="showToolbar">
+  <ion-toolbar [class.show-background]="showToolbarTitle">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/discover"></ion-back-button>
     </ion-buttons>
@@ -13,7 +13,7 @@
         <ion-icon slot="icon-only" name="filter"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title *ngIf="showToolbar">{{movie.title}}</ion-title>
+    <ion-title *ngIf="showToolbarTitle && movie$|async as movie">{{movie.title}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -21,6 +21,7 @@
   fullscreen="true"
   [scrollEvents]="true"
   (ionScroll)="onScroll($event)"
+  *ngIf="movie$ |async as movie"
 >
   <ion-grid class="ion-no-padding">
     <ion-row>
@@ -41,7 +42,7 @@
             {{ releaseDate | date:'MMM y' }} <b>·</b> {{ runtimeH }}h
             {{runtimeMin}}min
           </p>
-          <p class="director">Directed by: <br> <span class="director-name"> {{ imdbMovie.Director }}</span>  </p>
+          <p class="director" *ngIf="imdbMovie$|async as imdbMovie">Directed by: <br> <span class="director-name"> {{ imdbMovie.Director }}</span>  </p>
         </ion-label>
         <br />
 
@@ -93,11 +94,10 @@
               src="../../../assets/icon/imdbLogo.png"
             />
           </div>
-          <div class="rating-label-div">
+          <div class="rating-label-div" *ngIf="imdbMovie$|async as imdbMovie">
             <ion-label>
               <h4 class="font-x-s" *ngIf="imdbMovie.imdbRating != 'N/A'">{{imdbMovie.imdbRating}} / 10</h4>
               <h4 class="font-x-s" *ngIf="imdbMovie.imdbRating == 'N/A'">N/A</h4>
-
               <p class="font-x-s">
                 {{imdbMovie.imdbVotes}} <ion-icon name="people"></ion-icon>
               </p>
@@ -223,9 +223,9 @@
   </div>
 
   <!-- O vo je za Casto deo -->
-  <div *ngIf="cast">
+  <div *ngIf="cast && credits$ |async as credits">
     <h4 class="ion-padding-horizontal ion-margin-bottom">
-      {{movie.title}} cast
+      Cast of: {{movie.title}}
     </h4>
     <ion-list *ngFor="let cast of credits.cast">
       <ion-item>
@@ -277,8 +277,8 @@
   </div> -->
 
   <!-- Ovo je za Similar deo -->
-  <div *ngIf="similar" class="ion-padding-horizontal">
-    <h4>Similar movies</h4>
+  <div *ngIf="similar && similarMovies$|async as similarMovies" class="ion-padding-horizontal">
+    <h4>Similar movies to {{movie.title}}</h4>
     <ion-grid>
       <ion-row>
         <ion-col

@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  imageBaseUrl: 'https://image.tmdb.org/t/p/w500'
+  imageBaseUrl: 'https://image.tmdb.org/t/p/w500',
+  baseTMDBUrl: 'https://api.themoviedb.org/3',
+  tmdbAPIKey: '?api_key=b0f050761122a02ff898ef11aefc59c8'
 };
 
 /*

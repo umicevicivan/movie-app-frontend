@@ -22,7 +22,7 @@
     <ion-row class="ion-text-center">
       <ion-col
         size="4"
-        *ngFor="let movie of movies"
+        *ngFor="let movie of movies$|async"
         [routerLink]="[ '/', 'tabs','discover','movie', movie.id ]"
       >
         <ion-img

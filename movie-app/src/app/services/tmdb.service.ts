@@ -2,15 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { DiscoverMovies } from '../models/discover-movies.model';
-import { IMovie } from '../interfaces/movie.interface';
-import { IImdbMovie } from '../interfaces/imdb-movie.interface';
-import { ICredits } from '../interfaces/credits.interface';
 import { Filters } from '../models/filters.model';
 import { DateFormaterPipe } from '../helpers/date-formater.pipe';
-import {
-  LoadingController,
-  NavController,
-} from '@ionic/angular';
+import { Movie } from '../models/movie.model';
+import { IMDBMovie } from '../models/imdb-movie.model';
+import { Credits } from '../models/credits.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -26,19 +23,13 @@ export class TmdbService {
     return this._customDiscover;
   }
 
-//   public set customDiscover(a: DiscoverMovies) {
-//     this._customDiscover = a;
-// }
-
   constructor(
     public http: HttpClient,
     private dateFormater: DateFormaterPipe,    
-    private navCtrl: NavController,
-    private loadingCtrl: LoadingController
   ) {}
 
-  getIMDBMovie(id: string): Observable<IImdbMovie> {
-    return this.http.get<IImdbMovie>(
+  getIMDBMovie(id: string): Observable<IMDBMovie> {
+    return this.http.get<IMDBMovie>(
       'http://www.omdbapi.com/?i=' + id + '&apikey=84f4dc28'
     );
   }
@@ -51,16 +42,14 @@ export class TmdbService {
     );
   }
 
-  getMovieDetails(id: string): Observable<IMovie> {
-    return this.http.get<IMovie>(
-      'https://api.themoviedb.org/3/movie/' +
-        id +
-        '?api_key=b0f050761122a02ff898ef11aefc59c8'
+  getMovieDetails(id: string): Observable<Movie> {
+    return this.http.get<Movie>(
+      `${environment.baseTMDBUrl}/movie/${id}${environment.tmdbAPIKey}`
     );
   }
 
-  getMovieCredits(id: number): Observable<ICredits> {
-    return this.http.get<ICredits>(
+  getMovieCredits(id: number): Observable<Credits> {
+    return this.http.get<Credits>(
       'https://api.themoviedb.org/3/movie/' +
         id +
         '/credits?api_key=b0f050761122a02ff898ef11aefc59c8&language=en-US'

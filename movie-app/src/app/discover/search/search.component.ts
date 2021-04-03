@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonSearchbar, ModalController } from '@ionic/angular';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { DiscoverMovies } from 'src/app/models/discover-movies.model';
 import { TmdbService } from 'src/app/services/tmdb.service';
 import { environment } from 'src/environments/environment';
@@ -11,19 +12,27 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
+
+  private discoverMovies: BehaviorSubject<DiscoverMovies> = new BehaviorSubject(null);
+
+  discoverMovies$: Observable<DiscoverMovies> = this.discoverMovies.asObservable();
+
+
   @ViewChild('searchbar') searchbar: IonSearchbar;
-  discoverMovies = new DiscoverMovies();
   movies = [];
   imageBaseUrl = environment.imageBaseUrl;
   searchTermEmpty = false;
 
   constructor(
-    private modalCtrl: ModalController,
     private tmdbService: TmdbService,
     private router: Router
   ) {}
 
   ngOnInit() {}
+
+  ngOnDestroy(): void {
+    this.discoverMovies.complete();
+  }
 
   onCancel() {
     this.router.navigateByUrl('/tabs/discover');
@@ -44,9 +53,9 @@ export class SearchComponent implements OnInit {
     var searchTerm = event.srcElement.value;
     var search = searchTerm.split(' ').join('%20');
     this.tmdbService.getsearchMovies(search).subscribe(
-      (res) => {
-        this.discoverMovies = res;
-        this.movies = this.discoverMovies.results;
+      res => {
+        this.discoverMovies.next(res);
+        this.movies = this.discoverMovies.getValue().results;
         for(var i = 0; i < this.movies.length; i++){
           if(this.movies[i].poster_path == null){
             var m = this.movies[i];

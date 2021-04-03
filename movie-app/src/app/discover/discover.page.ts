@@ -5,6 +5,7 @@ import { TmdbService } from '../services/tmdb.service';
 import { IonInfiniteScroll, ModalController } from '@ionic/angular';
 import { Movie } from '../models/movie.model';
 import { SearchComponent } from './search/search.component';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-discover',
@@ -12,8 +13,10 @@ import { SearchComponent } from './search/search.component';
   styleUrls: ['discover.page.scss'],
 })
 export class DiscoverPage {
-  discoverMovies = new DiscoverMovies();
-  movies = [];
+  private movies: BehaviorSubject<Movie[]> = new BehaviorSubject([]);
+
+  movies$: Observable<Movie[]> = this.movies.asObservable();
+
   imageBaseUrl = environment.imageBaseUrl;
   page = 1;
  
@@ -29,6 +32,10 @@ export class DiscoverPage {
     this.loadDiscoverMovies(this.page);
   }
 
+  ngOnDestroy(): void {
+    this.movies.complete();
+  }
+
   infScroll(infiniteScroll) {
     this.page++;
     this.loadDiscoverMovies(this.page);
@@ -38,8 +45,9 @@ export class DiscoverPage {
   loadDiscoverMovies(page: number) {
     this.tmdbService.getDiscoverMovies(page).subscribe(
       (res) => {
-        this.discoverMovies = res;
-        this.movies.push.apply(this.movies, this.discoverMovies.results);
+        let movies = this.movies.getValue();
+        movies.push.apply(movies, res.results);
+        this.movies.next(movies);
       },
       (error) => {
         console.log('Greskica');

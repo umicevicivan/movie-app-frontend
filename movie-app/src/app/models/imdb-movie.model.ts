@@ -1,6 +1,4 @@
-import { IImdbMovie } from "../interfaces/imdb-movie.interface";
-
-export class IMDBMovie implements IImdbMovie{
+export class IMDBMovie{
   imdbVotes: string;
   imdbRating: string;
   Director: string;
