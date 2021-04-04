@@ -18,7 +18,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     if (request.url.includes(environment.baseTMDBUrl)) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMGYwNTA3NjExMjJhMDJmZjg5OGVmMTFhZWZjNTljOCIsInN1YiI6IjVmZDRjNzFjNzQ1MDdkMDAzZjVhZmFkMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.lbzfG2UhG2g7WN9P5OTtaJanpMY_0vlVMgLARdujYIs`,
+          Authorization: ``,
         },
       });
     }
