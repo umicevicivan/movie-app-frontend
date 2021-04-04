@@ -18,7 +18,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
     if (request.url.includes(environment.baseTMDBUrl)) {
       request = request.clone({
         setHeaders: {
-          Authorization: ``,
+          Authorization: `Bearer ${environment.code}`,
         },
       });
     }
