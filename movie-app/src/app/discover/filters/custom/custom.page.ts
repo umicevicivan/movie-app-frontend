@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { DiscoverMovies } from 'src/app/models/discover-movies.model';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Movie } from 'src/app/models/movie.model';
 import { TmdbService } from 'src/app/services/tmdb.service';
 import { environment } from 'src/environments/environment';
+import { map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { DiscoverMovies } from 'src/app/models/discover-movies.model';
 
 @Component({
   selector: 'app-custom',
@@ -11,10 +13,16 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./custom.page.scss'],
 })
 export class CustomPage implements OnInit {
-  movies: Movie[];
+
+  private movies: BehaviorSubject<Movie[]> = new BehaviorSubject([]);
+  private response: BehaviorSubject<DiscoverMovies> = new BehaviorSubject(null);
+
+  movies$: Observable<Movie[]> = this.movies.asObservable();
+  response$: Observable<DiscoverMovies> = this.response.asObservable();
+  moviesEmpty$: Observable<boolean> = this.movies$.pipe(map(movies => !movies || movies.length === 0));
+
   imageBaseUrl = environment.imageBaseUrl;
   page = 1;
-  discoverMovies = new DiscoverMovies();
 
   constructor(
     private tmdbService: TmdbService,
@@ -22,34 +30,29 @@ export class CustomPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadCustom();
+    this.movies.next(this.route.snapshot.data.filteredMovies.results);
+    this.response.next(this.route.snapshot.data.filteredMovies);
   }
 
-  loadCustom() {
-    return new Promise((resolve) => {
-      this.route.data.subscribe((data: { result: DiscoverMovies }) => {
-        this.discoverMovies = data.result;
-        this.movies = data.result.results;
-        resolve(true);
-      });
-    });
+  ngOnDestroy(): void {
+    this.movies.complete();
   }
 
   infScroll(infiniteScroll){
+    if(this.page >= this.response.getValue().total_pages){
+      infiniteScroll.target.complete();
+      return;
+    }
     this.page++;
-    this.getMoreMovies(this.page);
-    infiniteScroll.target.complete();
+    this.loadMore(this.page, infiniteScroll);
   }
 
-  getMoreMovies(page: number) {
-    this.tmdbService.loadCustomDiscover(page).subscribe(
-      (res) => {
-        this.discoverMovies = res;
-        this.movies.push.apply(this.movies, this.discoverMovies.results);
-      },
-      (error) => {
-        console.log('Greskica');
-      }
-    );
+  loadMore(page: number, infiniteScroll: any) {
+    this.tmdbService.loadCustomDiscover(page).subscribe(res =>{
+      let movies = this.movies.getValue();
+      movies.push.apply(movies, res.results);
+      this.movies.next(movies);
+      infiniteScroll.target.complete();
+    });
   }
 }

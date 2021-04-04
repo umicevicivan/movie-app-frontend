@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CustomResolverService } from './custom/custom-resolver.service';
-
+import { FilteredMoviesResolver } from 'src/app/helpers/resolvers/filtered.movies.resolver';
 import { FiltersPage } from './filters.page';
 
 const routes: Routes = [
@@ -12,7 +11,7 @@ const routes: Routes = [
   {
     path: 'custom',
     loadChildren: () => import('./custom/custom.module').then( m => m.CustomPageModule),
-    resolve: { result: CustomResolverService }
+    resolve: { filteredMovies: FilteredMoviesResolver}
   }
 ];
 

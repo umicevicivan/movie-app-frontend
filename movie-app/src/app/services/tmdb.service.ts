@@ -16,6 +16,7 @@ export class TmdbService {
   baseUrl: 'https://api.themoviedb.org/3';
   page = 1;
   private _customDiscover = new DiscoverMovies();
+  private currentYear = new Date().getFullYear();
   formatedURLStart = "";
   formatedURLEnd = "";
 
@@ -36,43 +37,36 @@ export class TmdbService {
 
   getDiscoverMovies(page: number): Observable<DiscoverMovies> {
     return this.http.get<DiscoverMovies>(
-      'https://api.themoviedb.org/3/discover/movie?api_key=b0f050761122a02ff898ef11aefc59c8&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=' +
-        page +
-        '&primary_release_year=2020'
+      `${environment.baseTMDBUrl}/discover/movie?language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}&primary_release_year=${this.currentYear}`
     );
   }
 
   getMovieDetails(id: string): Observable<Movie> {
     return this.http.get<Movie>(
-      `${environment.baseTMDBUrl}/movie/${id}${environment.tmdbAPIKey}`
+      `${environment.baseTMDBUrl}/movie/${id}`
     );
   }
 
   getMovieCredits(id: number): Observable<Credits> {
     return this.http.get<Credits>(
-      'https://api.themoviedb.org/3/movie/' +
-        id +
-        '/credits?api_key=b0f050761122a02ff898ef11aefc59c8&language=en-US'
+      `${environment.baseTMDBUrl}/movie/${id}/credits?language=en-US`
     );
   }
 
   getSimilarMovies(id: number): Observable<DiscoverMovies> {
     return this.http.get<DiscoverMovies>(
-      'https://api.themoviedb.org/3/movie/' +
-        id +
-        '/similar?api_key=b0f050761122a02ff898ef11aefc59c8&language=en-US&page=1'
+      `${environment.baseTMDBUrl}/movie/${id}/similar?language=en-US&page=1`
     );
   }
 
-  getsearchMovies(searchTerm: string): Observable<DiscoverMovies> {
+  getSearchMovies(searchTerm: string): Observable<DiscoverMovies> {
     return this.http.get<DiscoverMovies>(
-      'https://api.themoviedb.org/3/search/movie?api_key=b0f050761122a02ff898ef11aefc59c8&language=en-US&query=' +
-        searchTerm +
-        '&page=1&include_adult=false'
+      `${environment.baseTMDBUrl}/search/movie?language=en-US&query=${searchTerm}&page=1&include_adult=false`
     );
   }
 
   createCustomSearchURL(filters: Filters) {
+    //ova logika je retardirana ali mora ovako jer im se retardirano zovu paramteri
     var formatedDateTo = '';
     var formatedDateFrom = '';
     var formatedGenres = '';
@@ -102,9 +96,7 @@ export class TmdbService {
       formatedGenres = '&with_genres=' + b;
     }
     this.formatedURLStart =
-      'https://api.themoviedb.org/3/discover/movie?api_key=b0f050761122a02ff898ef11aefc59c8&language=en-US' +
-      formatedSortBy +
-      '&include_adult=false&include_video=false&page='; 
+      `${environment.baseTMDBUrl}/discover/movie?&language=en-US${formatedSortBy}&include_adult=false&include_video=false&page=`; 
     
     this.formatedURLEnd = formatedDateFrom +
       formatedDateTo +

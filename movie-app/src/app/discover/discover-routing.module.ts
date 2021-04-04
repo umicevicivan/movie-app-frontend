@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MovieResolver } from '../helpers/resolvers/movie.resolver';
 import { DiscoverPage } from './discover.page';
 import { SearchComponent } from './search/search.component';
 
@@ -11,6 +12,7 @@ const routes: Routes = [
   {
     path: 'movie/:id',
     loadChildren: () => import('./movie-details/movie-details.module').then( m => m.MovieDetailsPageModule),
+    resolve: {movie: MovieResolver}
   },
   {
     path: 'search',

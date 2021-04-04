@@ -8,9 +8,10 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TmdbService } from './services/tmdb.service';
 import { DateFormaterPipe } from './helpers/date-formater.pipe';
+import { HttpRequestInterceptor } from './helpers/interceptors/http-interceptor';
 
 @NgModule({
   declarations: [AppComponent, DateFormaterPipe],
@@ -21,7 +22,9 @@ import { DateFormaterPipe } from './helpers/date-formater.pipe';
     SplashScreen,
     TmdbService,
     DateFormaterPipe,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true}
+    
   ],
   bootstrap: [AppComponent]
 })

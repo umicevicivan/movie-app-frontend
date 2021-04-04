@@ -44,22 +44,14 @@ export class MovieDetailsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadMovie();
+    this.movie.next(this.route.snapshot.data.movie);
+    this.getIMDBStats(this.movie.getValue().imdb_id);
+    this.calculateRunTimeandReleaseDate();
   }
 
   ngOnDestroy(): void {
     this.movie.complete();
     this.imdbMovie.complete();
-  }
-
-  loadMovie() {
-    this.tmdbService
-      .getMovieDetails(this.route.snapshot.params.id)
-      .subscribe((res) => {
-        this.movie.next(res);
-        this.getIMDBStats(this.movie.getValue().imdb_id);
-        this.calculateRunTimeandReleaseDate();
-      });
   }
 
   onScroll($event: CustomEvent<ScrollDetail>) {
@@ -109,7 +101,7 @@ export class MovieDetailsPage implements OnInit {
       }
     }
     if (ev.detail.value === 'similar') {
-      if (this.similarMovies.getValue() == null ) {
+      if (this.similarMovies.getValue() == null) {
         this.loadingCtrl
           .create({ message: 'Loading similar...' })
           .then((loadingEl) => {
@@ -133,7 +125,7 @@ export class MovieDetailsPage implements OnInit {
 
   loadCredits(id: number) {
     return new Promise((resolve) => {
-      this.tmdbService.getMovieCredits(id).subscribe(res => {
+      this.tmdbService.getMovieCredits(id).subscribe((res) => {
         this.credits.next(res);
         resolve(true);
       });
@@ -142,7 +134,7 @@ export class MovieDetailsPage implements OnInit {
 
   loadSimilar(id: number) {
     return new Promise((resolve) => {
-      this.tmdbService.getSimilarMovies(id).subscribe(res => {
+      this.tmdbService.getSimilarMovies(id).subscribe((res) => {
         this.similarMovies.next(res);
         resolve(true);
       });

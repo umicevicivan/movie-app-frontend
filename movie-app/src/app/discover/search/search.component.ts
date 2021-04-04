@@ -52,7 +52,7 @@ export class SearchComponent implements OnInit {
     this.searchTermEmpty = false;
     var searchTerm = event.srcElement.value;
     var search = searchTerm.split(' ').join('%20');
-    this.tmdbService.getsearchMovies(search).subscribe(
+    this.tmdbService.getSearchMovies(search).subscribe(
       res => {
         this.discoverMovies.next(res);
         this.movies = this.discoverMovies.getValue().results;
