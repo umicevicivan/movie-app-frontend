@@ -1,120 +1,124 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/discover"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Filters</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/tabs/discover"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Filters</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="form">
-    <ion-grid fixed>
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item clas="selector">
-            <ion-label>Genres:</ion-label>
-            <ion-select
-              multiple="true"
-              cancelText="Cancel"
-              okText="Ok"
-              formControlName="genres"
-            >
-              <ion-select-option value="28">Action</ion-select-option>
-              <ion-select-option value="35">Comedy</ion-select-option>
-              <ion-select-option value="18">Drama</ion-select-option>
-              <ion-select-option value="878">Science Fiction</ion-select-option>
-              <ion-select-option value="9648">Mystery</ion-select-option>
-              <ion-select-option value="53">Thriller</ion-select-option>
-              <ion-select-option value="14">Fantasy</ion-select-option>
-              <ion-select-option value="12">Adventure</ion-select-option>
-              <ion-select-option value="10749">Romance</ion-select-option>
-              <ion-select-option value="80">Crime</ion-select-option>
-              <ion-select-option value="10752">War</ion-select-option>
-              <ion-select-option value="37">Western</ion-select-option>
-              <ion-select-option value="36">History</ion-select-option>
-              <ion-select-option value="27">Horror</ion-select-option>
-              <ion-select-option value="16">Animation</ion-select-option>
-              <ion-select-option value="10751">Family</ion-select-option>
-              <ion-select-option value="99">Documentary</ion-select-option>
-              <ion-select-option value="10402">Music</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label  position="floating"><h2>Release year from:</h2> </ion-label>
-            <ion-datetime
-              displayFormat="YYYY"
-              [min]="fromMinYear"
-              [max]="fromMaxYear"
-              placeholder="Select Year"
-              formControlName="dateFrom"
-              (ionChange)="fromDateChange($event)"
-            ></ion-datetime>
-          </ion-item>
-        </ion-col>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label position="floating"><h2>Release year to:</h2> </ion-label>
+    <form [formGroup]="form">
+        <ion-grid fixed>
+            <ion-row>
+                <ion-col size-sm="6" offset-sm="3">
+                    <ion-item clas="selector">
+                        <ion-label>Genres:</ion-label>
+                        <ion-select
+                                multiple="true"
+                                cancelText="Cancel"
+                                okText="Ok"
+                                formControlName="genres"
+                        >
+                            <ion-select-option value="28">Action</ion-select-option>
+                            <ion-select-option value="35">Comedy</ion-select-option>
+                            <ion-select-option value="18">Drama</ion-select-option>
+                            <ion-select-option value="878">Science Fiction</ion-select-option>
+                            <ion-select-option value="9648">Mystery</ion-select-option>
+                            <ion-select-option value="53">Thriller</ion-select-option>
+                            <ion-select-option value="14">Fantasy</ion-select-option>
+                            <ion-select-option value="12">Adventure</ion-select-option>
+                            <ion-select-option value="10749">Romance</ion-select-option>
+                            <ion-select-option value="80">Crime</ion-select-option>
+                            <ion-select-option value="10752">War</ion-select-option>
+                            <ion-select-option value="37">Western</ion-select-option>
+                            <ion-select-option value="36">History</ion-select-option>
+                            <ion-select-option value="27">Horror</ion-select-option>
+                            <ion-select-option value="16">Animation</ion-select-option>
+                            <ion-select-option value="10751">Family</ion-select-option>
+                            <ion-select-option value="99">Documentary</ion-select-option>
+                            <ion-select-option value="10402">Music</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating"><h2>Release year from:</h2></ion-label>
+                        <ion-datetime
+                                displayFormat="YYYY"
+                                [min]="fromMinYear"
+                                [max]="fromMaxYear"
+                                placeholder="Select Year"
+                                formControlName="dateFrom"
+                                (ionChange)="fromDateChange($event)"
+                        ></ion-datetime>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-item>
+                        <ion-label position="floating"><h2>Release year to:</h2></ion-label>
 
-            <ion-datetime
-              displayFormat="YYYY"
-              [min]="toMinYear"
-              [max]="toMaxYear"
-              placeholder="Select Year"
-              formControlName="dateTo"
-              (ionChange) = "toDateChange($event)"
-            ></ion-datetime>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+                        <ion-datetime
+                                displayFormat="YYYY"
+                                [min]="toMinYear"
+                                [max]="toMaxYear"
+                                placeholder="Select Year"
+                                formControlName="dateTo"
+                                (ionChange)="toDateChange($event)"
+                        ></ion-datetime>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
 
-      <ion-row>
-        <ion-col size-sm="6" offset-sm="3">
-          <ion-item>
-            <ion-label>Sort by:</ion-label>
-            <ion-select
-              interface="popover"
-              value="popularity"
-              formControlName="sortBy"
-            >
-              <ion-select-option value="popularity"
-                >Popularity</ion-select-option
-              >
-              <ion-select-option value="release_date"
-                >Release date</ion-select-option
-              >
-              <ion-select-option value="original_title"
-                >Alphabetical</ion-select-option
-              >
-              <ion-select-option value="vote_average">Rating</ion-select-option>
-              <ion-select-option value="revenue">Revenue</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="12">
-          <ion-toolbar>
-            <ion-segment value="desc" (ionChange)="onSegmentChange($event)">
-              <ion-segment-button value="desc">Descending</ion-segment-button>
-              <ion-segment-button value="asc">Ascending</ion-segment-button>
-            </ion-segment>
-          </ion-toolbar>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <ion-button
-      (click)="onSearch()"
-      class="ion-padding"
-      expand="block"
-      fill="outline"
-      color="primary"
-      [routerLink]="[ '/', 'tabs','discover','filters', 'custom']"
-      >Discover!</ion-button
-    >
-  </form>
+            <ion-row>
+                <ion-col size-sm="6" offset-sm="3">
+                    <ion-item>
+                        <ion-label>Sort by:</ion-label>
+                        <ion-select
+                                interface="popover"
+                                value="popularity"
+                                formControlName="sortBy"
+                        >
+                            <ion-select-option value="popularity"
+                            >Popularity
+                            </ion-select-option
+                            >
+                            <ion-select-option value="release_date"
+                            >Release date
+                            </ion-select-option
+                            >
+                            <ion-select-option value="original_title"
+                            >Alphabetical
+                            </ion-select-option
+                            >
+                            <ion-select-option value="vote_average">Rating</ion-select-option>
+                            <ion-select-option value="revenue">Revenue</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-toolbar>
+                        <ion-segment value="desc" (ionChange)="onSegmentChange($event)">
+                            <ion-segment-button value="desc">Descending</ion-segment-button>
+                            <ion-segment-button value="asc">Ascending</ion-segment-button>
+                        </ion-segment>
+                    </ion-toolbar>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <ion-button
+                (click)="onSearch()"
+                class="ion-padding"
+                expand="block"
+                fill="outline"
+                color="primary"
+                [routerLink]="[ '/', 'tabs','discover','filters', 'custom']"
+        >Discover!
+        </ion-button
+        >
+    </form>
 </ion-content>

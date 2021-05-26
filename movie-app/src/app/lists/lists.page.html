@@ -1,11 +1,27 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Lists
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>
+            Lists
+        </ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="createList()">
+                <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+    <ion-list>
+        <ion-item *ngFor="let list of lists$|async">
+            <ion-icon name="list-circle-outline" class="ion-margin-end"></ion-icon>
+            <ion-label>{{list.name}}</ion-label>
+            <ion-buttons slot="end" class="ion-no-margin">
+                <ion-button [routerLink]="[ '/', 'tabs','lists','list-details', list.name ]">
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+        </ion-item>
+    </ion-list>
 
 </ion-content>

@@ -2,10 +2,10 @@ import { DatePipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'dateFormater',
+    name: 'dateFormater',
 })
 export class DateFormaterPipe extends DatePipe implements PipeTransform {
-  transform(value: any, args?: any): any {
-    return super.transform(value, 'yyyy');
-  }
+    transform(value: any, args?: any): any {
+        return super.transform(value, 'yyyy');
+    }
 }

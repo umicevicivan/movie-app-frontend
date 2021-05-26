@@ -1,7 +1,12 @@
-<ion-header>
+<ion-header *ngIf="movie$|async as movie">
     <ion-toolbar [class.show-background]="showToolbarTitle">
         <ion-buttons slot="start">
             <ion-back-button defaultHref="/tabs/discover"></ion-back-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button (click)="addMovieToList(movie.id)">
+                <ion-icon name="heart-outline"></ion-icon>
+            </ion-button>
         </ion-buttons>
         <ion-buttons slot="end">
             <ion-button [routerLink]="[ '/', 'tabs','discover','search']">
@@ -26,9 +31,9 @@
     <ion-grid class="ion-no-padding">
         <ion-row>
             <ion-col size="12">
-        <span class="faded faded-bottom">
-          <ion-img *ngIf="movie.backdrop_path != null" [src]="imageBaseUrl + movie.backdrop_path"></ion-img>
-        </span>
+                <span class="faded faded-bottom">
+                  <ion-img *ngIf="movie.backdrop_path != null" [src]="imageBaseUrl + movie.backdrop_path"></ion-img>
+                </span>
             </ion-col>
         </ion-row>
     </ion-grid>
@@ -57,7 +62,6 @@
                     <b>{{genre.name}}</b>
                 </ion-chip>
             </ion-col>
-
             <ion-col size="4">
                 <ion-img
                         *ngIf="movie.poster_path != null"
@@ -129,9 +133,8 @@
                 <ion-col size="10">
                     <p class="ion-no-padding ion-no-margin">{{ movie.tagline | uppercase}}</p>
                     <p>{{ movie.overview }}</p>
-                    <p>{{ movie.id }}</p>
                 </ion-col>
-                <ion-col size="2" >
+                <ion-col size="2">
                     <ion-button (click)="textToSpeech(movie.overview)" fill="clear">
                         <ion-icon slot="icon-only" name="mic-outline"></ion-icon>
                     </ion-button>

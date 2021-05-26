@@ -8,13 +8,14 @@ import { OptionsPage } from './options.page';
 import { OptionsPageRoutingModule } from './options-routing.module';
 
 @NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    RouterModule.forChild([{ path: '', component: OptionsPage }]),
-    OptionsPageRoutingModule,
-  ],
-  declarations: [OptionsPage]
+    imports: [
+        IonicModule,
+        CommonModule,
+        FormsModule,
+        RouterModule.forChild([{path: '', component: OptionsPage}]),
+        OptionsPageRoutingModule,
+    ],
+    declarations: [OptionsPage]
 })
-export class OptionsPageModule {}
+export class OptionsPageModule {
+}

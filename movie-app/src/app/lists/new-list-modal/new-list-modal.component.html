@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="dismiss()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Create new list</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+    <form [formGroup]="form">
+        <ion-grid>
+            <ion-row class="justify-content-center">
+                <ion-col class="align-self-center" size-md="6" size-lg="5" size-xs="12">
+                    <div class="ion-padding">
+                        <ion-item>
+                            <ion-input formControlName="name" type="text" placeholder="Movie name" required></ion-input>
+                        </ion-item>
+                    </div>
+                    <div class="ion-margin-top ion-padding">
+                        <ion-button color="success" (click)="createList()" [disabled]="form.invalid" expand="block">
+                            Create!
+                        </ion-button>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+
+
+</ion-content>

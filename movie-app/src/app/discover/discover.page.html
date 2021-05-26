@@ -1,45 +1,45 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> Discover </ion-title>
-    <ion-buttons slot="end">
-      <ion-button [routerLink]="[ '/', 'tabs','discover','filters']">
-        <ion-icon slot="icon-only" name="filter"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title> Discover</ion-title>
+        <ion-buttons slot="end">
+            <ion-button [routerLink]="[ '/', 'tabs','discover','filters']">
+                <ion-icon slot="icon-only" name="filter"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 
 </ion-header>
 
 <ion-content>
-  <div class="sticky">
-    <ion-searchbar
-    [routerLink]="[ '/', 'tabs','discover','search']"
-    showCancelButton="focus"
-  ></ion-searchbar>
-  </div>
-  <ion-grid fixed>
-    <!-- <p>{{ loadedDiscoverMoviesList.pages }}</p> -->
-    <ion-row class="ion-text-center">
-      <ion-col
-        size="4"
-        *ngFor="let movie of movies$|async"
-        [routerLink]="[ '/', 'tabs','discover','movie', movie.id ]"
-      >
-        <ion-img
-          class="border-radius"
-          [src]="imageBaseUrl + movie.poster_path"
-        ></ion-img>
-        <ion-label>
-          <p class="smovie-label">{{ movie.title }}</p>
-        </ion-label>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-infinite-scroll threshold="30%" (ionInfinite)="infScroll($event)">
-    <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      loadingText="Loading more movies..."
-    >
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+    <div class="sticky">
+        <ion-searchbar
+                [routerLink]="[ '/', 'tabs','discover','search']"
+                showCancelButton="focus"
+        ></ion-searchbar>
+    </div>
+    <ion-grid fixed>
+        <!-- <p>{{ loadedDiscoverMoviesList.pages }}</p> -->
+        <ion-row class="ion-text-center">
+            <ion-col
+                    size="4"
+                    *ngFor="let movie of movies$|async"
+                    [routerLink]="[ '/', 'tabs','discover','movie', movie.id ]"
+            >
+                <ion-img
+                        class="border-radius"
+                        [src]="imageBaseUrl + movie.poster_path"
+                ></ion-img>
+                <ion-label>
+                    <p class="smovie-label">{{ movie.title }}</p>
+                </ion-label>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-infinite-scroll threshold="30%" (ionInfinite)="infScroll($event)">
+        <ion-infinite-scroll-content
+                loadingSpinner="bubbles"
+                loadingText="Loading more movies..."
+        >
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-content>

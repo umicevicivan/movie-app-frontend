@@ -5,27 +5,28 @@ import { DiscoverPage } from './discover.page';
 import { SearchComponent } from './search/search.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: DiscoverPage,
-  },
-  {
-    path: 'movie/:id',
-    loadChildren: () => import('./movie-details/movie-details.module').then( m => m.MovieDetailsPageModule),
-    resolve: {movie: MovieResolver}
-  },
-  {
-    path: 'search',
-    component: SearchComponent
-  },
-  {
-    path: 'filters',
-    loadChildren: () => import('./filters/filters.module').then( m => m.FiltersPageModule)
-  }
+    {
+        path: '',
+        component: DiscoverPage,
+    },
+    {
+        path: 'movie/:id',
+        loadChildren: () => import('./movie-details/movie-details.module').then(m => m.MovieDetailsPageModule),
+        resolve: {movie: MovieResolver}
+    },
+    {
+        path: 'search',
+        component: SearchComponent
+    },
+    {
+        path: 'filters',
+        loadChildren: () => import('./filters/filters.module').then(m => m.FiltersPageModule)
+    }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
-export class DiscoverPageRoutingModule {}
+export class DiscoverPageRoutingModule {
+}

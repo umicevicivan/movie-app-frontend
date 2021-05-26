@@ -1,5 +1,5 @@
-export class IMDBMovie{
-  imdbVotes: string;
-  imdbRating: string;
-  Director: string;
+export class IMDBMovie {
+    imdbVotes: string;
+    imdbRating: string;
+    Director: string;
 }

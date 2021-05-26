@@ -9,12 +9,13 @@ import { CustomPageRoutingModule } from './custom-routing.module';
 import { CustomPage } from './custom.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    CustomPageRoutingModule
-  ],
-  declarations: [CustomPage]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        CustomPageRoutingModule
+    ],
+    declarations: [CustomPage]
 })
-export class CustomPageModule {}
+export class CustomPageModule {
+}

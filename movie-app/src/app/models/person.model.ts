@@ -1,4 +1,4 @@
-export class Person{
+export class Person {
     id: number;
     gender: number;
     known_for_department: string;

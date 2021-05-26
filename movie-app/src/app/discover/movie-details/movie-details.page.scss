@@ -17,7 +17,7 @@
 
   &.faded-left.faded-right:after {
     box-shadow: inset $offset 0 $blur-radius (-$spread-radius),
-      inset (-$offset) 0 $blur-radius (-$spread-radius);
+    inset (-$offset) 0 $blur-radius (-$spread-radius);
   }
 
   &.faded-left.faded-top:after {
@@ -34,7 +34,7 @@
 
   &.faded-top.faded-bottom:after {
     box-shadow: inset 0 $offset $blur-radius (-$spread-radius),
-      inset 0 (-$offset) $blur-radius (-$spread-radius);
+    inset 0 (-$offset) $blur-radius (-$spread-radius);
   }
 
   &.faded-left.faded-bottom:after {
@@ -95,17 +95,17 @@ $faded-wide-spread-radius: 28px !default;
 
   &.faded-narrow {
     @include faded(
-      $faded-narrow-offset,
-      $faded-narrow-blur-radius,
-      $faded-narrow-spread-radius
+                    $faded-narrow-offset,
+                    $faded-narrow-blur-radius,
+                    $faded-narrow-spread-radius
     );
   }
 
   &.faded-wide {
     @include faded(
-      $faded-wide-offset,
-      $faded-wide-blur-radius,
-      $faded-wide-spread-radius
+                    $faded-wide-offset,
+                    $faded-wide-blur-radius,
+                    $faded-wide-spread-radius
     );
   }
 }
@@ -178,7 +178,8 @@ ion-content {
   font-size: small;
   margin-top: 10px;
 }
-.director-name{
+
+.director-name {
   color: rgb(209, 209, 209);
 }
 
@@ -205,6 +206,7 @@ ion-content {
   margin-top: 12px;
   width: 25px;
 }
+
 .font-x-s {
   font-size: x-small;
 }
@@ -247,3 +249,4 @@ ion-chip {
   z-index: 100000;
   background-color: var(--ion-background-color);
 }
+

@@ -7,12 +7,13 @@ import { ListsPage } from './lists.page';
 import { ListsPageRoutingModule } from './lists-routing.module';
 
 @NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    ListsPageRoutingModule
-  ],
-  declarations: [ListsPage]
+    imports: [
+        IonicModule,
+        CommonModule,
+        FormsModule,
+        ListsPageRoutingModule
+    ],
+    declarations: [ListsPage]
 })
-export class ListsPageModule {}
+export class ListsPageModule {
+}

@@ -1,16 +1,19 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {LoadingController, NavController} from '@ionic/angular';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AlertController, LoadingController } from '@ionic/angular';
 
-import {Movie} from 'src/app/models/movie.model';
-import {TmdbService} from 'src/app/services/tmdb.service';
-import {environment} from 'src/environments/environment';
-import {ScrollDetail} from '@ionic/core';
-import {IMDBMovie} from 'src/app/models/imdb-movie.model';
-import {Credits} from 'src/app/models/credits.model';
-import {DiscoverMovies} from 'src/app/models/discover-movies.model';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {TextToSpeech} from '@ionic-native/text-to-speech/ngx';
+import { Movie } from 'src/app/models/movie.model';
+import { TmdbService } from 'src/app/services/tmdb.service';
+import { environment } from 'src/environments/environment';
+import { ScrollDetail } from '@ionic/core';
+import { IMDBMovie } from 'src/app/models/imdb-movie.model';
+import { Credits } from 'src/app/models/credits.model';
+import { DiscoverMovies } from 'src/app/models/discover-movies.model';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
+import { ListModel } from '../../models/list.model';
+import { ApplicationService } from '../../services/application.service';
+import { MovieListWrapperModal } from '../../models/movie-list-wrapper.modal';
 
 @Component({
     selector: 'app-movie-details',
@@ -22,13 +25,15 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
     private imdbMovie: BehaviorSubject<IMDBMovie> = new BehaviorSubject(null);
     private credits: BehaviorSubject<Credits> = new BehaviorSubject(null);
     private similarMovies: BehaviorSubject<DiscoverMovies> = new BehaviorSubject(null);
+    private lists: BehaviorSubject<ListModel[]> = new BehaviorSubject([]);
 
+    lists$: Observable<ListModel[]> = this.lists.asObservable();
     movie$: Observable<Movie> = this.movie.asObservable();
     imdbMovie$: Observable<IMDBMovie> = this.imdbMovie.asObservable();
     credits$: Observable<Credits> = this.credits.asObservable();
     similarMovies$: Observable<DiscoverMovies> = this.similarMovies.asObservable();
 
-    isDataAvailable: boolean = true;
+    isDataAvailable = true;
     imageBaseUrl = environment.imageBaseUrl;
     releaseDate: Date;
     showToolbarTitle = false;
@@ -37,11 +42,14 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
     info = true;
     cast = false;
     similar = false;
+    inputs = [];
 
     constructor(
         private tmdbService: TmdbService,
         private route: ActivatedRoute,
-        private loadingCtrl: LoadingController, private tts: TextToSpeech
+        private loadingCtrl: LoadingController, private tts: TextToSpeech,
+        private applicationService: ApplicationService,
+        private alertController: AlertController
     ) {
     }
 
@@ -49,6 +57,7 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
         this.movie.next(this.route.snapshot.data.movie);
         this.getIMDBStats(this.movie.getValue().imdb_id);
         this.calculateRunTimeandReleaseDate();
+        this.createInputs();
     }
 
     ngOnDestroy(): void {
@@ -147,5 +156,53 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
         this.tts.speak(overview)
             .then(() => console.log('Success'))
             .catch((reason: any) => console.log(reason));
+    }
+
+    addMovieToList(apiId: number): void {
+        const wrapper: MovieListWrapperModal = new MovieListWrapperModal();
+        wrapper.movieApiKey = apiId;
+        this.presentAlertCheckbox(wrapper);
+    }
+
+    private createInputs() {
+        this.applicationService.fetchLists().subscribe(res => {
+            this.lists.next(res);
+            this.lists.getValue().forEach(item => {
+                this.inputs.push(
+                    {
+                        type: 'checkbox',
+                        label: item.name,
+                        value: item.name,
+                        checked: false
+                    }
+                );
+            });
+        });
+    }
+
+    async presentAlertCheckbox(wrapper: MovieListWrapperModal) {
+        const alert = await this.alertController.create({
+            header: 'Chose movie list',
+            inputs: this.inputs,
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
+                        console.log('Confirm Cancel');
+                    }
+                }, {
+                    text: 'Ok',
+                    handler: (data) => {
+                        wrapper.listName = data[0];
+                        this.applicationService.addMovie(wrapper).subscribe(res => {
+                            alert.dismiss(null);
+                        });
+                    }
+                }
+            ]
+        });
+        await alert.present();
     }
 }

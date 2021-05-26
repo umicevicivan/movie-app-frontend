@@ -9,13 +9,14 @@ import { FiltersPageRoutingModule } from './filters-routing.module';
 import { FiltersPage } from './filters.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    FiltersPageRoutingModule,
-    ReactiveFormsModule
-  ],
-  declarations: [FiltersPage]
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        FiltersPageRoutingModule,
+        ReactiveFormsModule
+    ],
+    declarations: [FiltersPage]
 })
-export class FiltersPageModule {}
+export class FiltersPageModule {
+}

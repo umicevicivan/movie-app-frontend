@@ -4,21 +4,21 @@ import { IonicModule } from '@ionic/angular';
 import { OptionsPage } from './Options.page';
 
 describe('OptionsPage', () => {
-  let component: OptionsPage;
-  let fixture: ComponentFixture<OptionsPage>;
+    let component: OptionsPage;
+    let fixture: ComponentFixture<OptionsPage>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [OptionsPage],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [OptionsPage],
+            imports: [IonicModule.forRoot()]
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(OptionsPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+        fixture = TestBed.createComponent(OptionsPage);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    }));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

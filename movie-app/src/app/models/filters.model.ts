@@ -1,4 +1,4 @@
-export class Filters{
+export class Filters {
     genres: String[];
     dateFrom: Date;
     dateTo: Date;
