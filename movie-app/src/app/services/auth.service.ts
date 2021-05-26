@@ -14,30 +14,28 @@ export class AuthService {
     }
 
     login(form) {
-        console.log('forma:', form);
-        // let params = new URLSearchParams();
-        // params.append('grant_type','authorization_code');
-        // params.append('client_id', this.moviesapp);
-        // params.append('client_secret', this.secret);
+        let params = new URLSearchParams();
+        params.append('username', form.get('username').value);
+        params.append('password', form.get('password').value);
+        params.append('grant_type','password');
+        params.append('client_id','moviesapp');
 
-        // let headers =
-        //     new HttpHeaders({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'});
+        let headers =
+            new HttpHeaders({
+                'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
+                'Authorization': 'Basic ' + btoa("moviesapp:secret")
+            });
+        let options = {
+            headers: headers
+        };
 
-        // const headers = new HttpHeaders({ 'Authorization': 'Basic ' + 'bW92aWVzYXBwOnNlY3JldA==',
-        //     'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'} );
-        const headers = new HttpHeaders({
-            'Authorization': 'Basic bW92aWVzYXBwOnNlY3JldA==',
-            'Accept': '*/*',
-            'Content-Type': 'multipart/form-data; boundary=--------------------------145032037776908835705708',
-            // 'Content-Type': 'application/x-www-form-urlencoded'
-        });
-        const formData = new FormData();
-        formData.append('username', form.get('username').value);
-        formData.append('password', form.get('password').value);
-        console.log(formData);
-        // const body = JSON.stringify(user);
+        // NJNJJJJJNJNJNJJNJNJNJNJNJNJN
 
-        return this.http.post('http://localhost:8080/oauth/token?grant_type=password', formData, {headers});
+        this.http.post('http://localhost:8080/oauth/token', params.toString(), options)
+            .subscribe(
+                data => console.log(data),
+                err => alert('Invalid Credentials'));
+
     }
 
     loggedIn() {

@@ -23,9 +23,6 @@ export class LoginPage implements OnInit {
     }
 
     login() {
-        this.authService.login(this.form).subscribe(() => {
-            console.log('aaaaa');
-            this.router.navigateByUrl('/tabs/discover');
-        });
+        this.authService.login(this.form);
     }
 }
