@@ -11,8 +11,6 @@ import { AlertController } from '@ionic/angular';
     providedIn: 'root'
 })
 export class AuthService {
-    private moviesapp = 'moviesapp';
-    private secret = 'secret';
 
     constructor(private http: HttpClient, private cookieService: CookieService, private router: Router,
                 private alertController: AlertController) {
