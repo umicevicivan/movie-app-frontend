@@ -31,12 +31,7 @@ export class RegisterPage implements OnInit {
 
     register() {
         const user = this.form.getRawValue();
-        console.log(user);
-        this.authService.register(user).subscribe((res) => {
-            if (res && res.password === null) {
-                this.router.navigateByUrl('/login');
-            }
-        });
+        this.authService.register(user);
     }
 
 }

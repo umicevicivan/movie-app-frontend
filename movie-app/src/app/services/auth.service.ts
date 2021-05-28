@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserModel } from '../models/user.model';
-import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
@@ -44,14 +43,14 @@ export class AuthService {
                         this.router.navigate(['/tabs']);
                     }, 1000);
                 },
-                err => this.presentAlert());
+                err => this.presentAlert('Login failed', 'Check if username and password are correct.'));
     }
 
-    async presentAlert() {
+    async presentAlert(header: string, message: string) {
         const alert = await this.alertController.create({
-            header: 'Login failed',
+            header,
             subHeader: '',
-            message: 'Check if username and password are correct.',
+            message,
             buttons: ['OK']
         });
         await alert.present();
@@ -59,15 +58,17 @@ export class AuthService {
 
     loggedIn() {
         const token = localStorage.getItem('token');
-        if (token) {
-            return true;
-        } else {
-            return false;
-        }
+        return !!token;
     }
 
-    register(data: UserModel): Observable<UserModel> {
-        return this.http.post<UserModel>('http://localhost:8080/api/user/register', data);
+    register(data: UserModel) {
+        this.http.post('http://localhost:8080/api/user/register', data).subscribe(res => {
+                if (res) {
+                    this.router.navigateByUrl('/login');
+                }
+            },
+            (error) => this.presentAlert('Register failed', error.error.apierror.message)
+        );
     }
 
     getToken() {
