@@ -14,6 +14,7 @@ import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { ListModel } from '../../models/list.model';
 import { ApplicationService } from '../../services/application.service';
 import { MovieListWrapperModal } from '../../models/movie-list-wrapper.modal';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
     selector: 'app-movie-details',
@@ -51,7 +52,8 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private loadingCtrl: LoadingController, private tts: TextToSpeech,
         private applicationService: ApplicationService,
-        private alertController: AlertController
+        private alertController: AlertController,
+        private alertService: AlertService
     ) {
     }
 
@@ -59,7 +61,6 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
         this.movie.next(this.route.snapshot.data.movie);
         this.getIMDBStats(this.movie.getValue().imdb_id);
         this.calculateRunTimeandReleaseDate();
-        this.createInputs();
         this.fetchAddedLists(this.movie.getValue().id);
     }
 
@@ -161,28 +162,33 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
             .catch((reason: any) => console.log(reason));
     }
 
-    addMovieToList(apiId: number): void {
-        this.presentAlertCheckbox(apiId);
+    private createInputs() {
+        const added = this.addedLists.getValue();
+        this.lists.getValue().forEach(item => {
+            let checked = false;
+            if (added.some(list => list.name === item.name)) {
+                checked = true;
+            }
+            this.inputs.push(
+                {
+                    type: 'checkbox',
+                    label: item.name,
+                    value: item.name,
+                    checked,
+                }
+            );
+        });
     }
 
-    private createInputs() {
+    addMovieToList(apiId: number): void {
         this.applicationService.fetchLists().subscribe(res => {
+            if (res && res.length === 0) {
+                this.alertService.warning('No movie lists!', 'Please create at least one movie list.');
+                return;
+            }
             this.lists.next(res);
-            const added = this.addedLists.getValue();
-            this.lists.getValue().forEach(item => {
-                let checked = false;
-                if (added.some(list => list.name === item.name)) {
-                    checked = true;
-                }
-                this.inputs.push(
-                    {
-                        type: 'checkbox',
-                        label: item.name,
-                        value: item.name,
-                        checked,
-                    }
-                );
-            });
+            this.createInputs();
+            this.presentAlertCheckbox(apiId);
         });
     }
 
@@ -191,6 +197,7 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
             this.addedLists.next(res);
         });
     }
+
 
     async presentAlertCheckbox(apiId: number) {
         const alert = await this.alertController.create({

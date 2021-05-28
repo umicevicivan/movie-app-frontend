@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserModel } from '../models/user.model';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertService } from './alert.service';
 
 
 @Injectable({
@@ -11,8 +11,10 @@ import { AlertController } from '@ionic/angular';
 })
 export class AuthService {
 
-    constructor(private http: HttpClient, private cookieService: CookieService, private router: Router,
-                private alertController: AlertController) {
+    constructor(private http: HttpClient,
+                private cookieService: CookieService,
+                private router: Router,
+                private alertService: AlertService) {
     }
 
     login(form) {
@@ -43,17 +45,7 @@ export class AuthService {
                         this.router.navigate(['/tabs']);
                     }, 1000);
                 },
-                err => this.presentAlert('Login failed', 'Check if username and password are correct.'));
-    }
-
-    async presentAlert(header: string, message: string) {
-        const alert = await this.alertController.create({
-            header,
-            subHeader: '',
-            message,
-            buttons: ['OK']
-        });
-        await alert.present();
+                err => this.alertService.warning('Login failed', 'Check if username and password are correct.'));
     }
 
     loggedIn() {
@@ -67,7 +59,7 @@ export class AuthService {
                     this.router.navigateByUrl('/login');
                 }
             },
-            (error) => this.presentAlert('Register failed', error.error.apierror.message)
+            (error) => this.alertService.warning('Register failed', error.error.apierror.message)
         );
     }
 

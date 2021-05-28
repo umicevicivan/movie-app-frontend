@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ApplicationService } from '../../services/application.service';
 import { Router } from '@angular/router';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
     selector: 'app-new-list-modal',
@@ -13,8 +14,8 @@ export class NewListModalComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private modalController: ModalController, private applicationSerivce: ApplicationService, private router: Router,
-                private alertController: AlertController) {
+    constructor(private modalController: ModalController, private applicationSerivce: ApplicationService,
+                private router: Router, private alertService: AlertService) {
         this.form = new FormGroup({
             name: new FormControl(null),
         });
@@ -34,20 +35,7 @@ export class NewListModalComponent implements OnInit {
             this.router.navigate(['/tabs/lists']);
             this.dismiss();
         }, (error) => {
-            this.presentAlert(error.error.apierror.message);
+            this.alertService.warning('Failed to create new list', error.error.apierror.message);
         });
     }
-
-    async presentAlert(msg: string) {
-        const alert = await this.alertController.create({
-            cssClass: 'my-custom-class',
-            header: 'Failed to create new list',
-            subHeader: '',
-            message: msg,
-            buttons: ['OK']
-        });
-
-        await alert.present();
-    }
-
 }
