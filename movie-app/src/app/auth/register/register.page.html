@@ -5,31 +5,53 @@
 </ion-header>
 
 <ion-content>
-    <form #form="ngForm" (ngSubmit)="register(form)">
+    <form [formGroup]="form">
         <ion-grid>
             <ion-row class="justify-content-center">
                 <ion-col class="align-self-center" size-md="6" size-lg="5" size-xs="12">
                     <div class="ion-padding">
                         <ion-item>
-                            <ion-input name="firstName" type="text" placeholder="Name" ngModel required></ion-input>
+                            <ion-label position="floating">Name</ion-label>
+                            <ion-input formControlName="firstName" type="text" placeholder="Name"></ion-input>
                         </ion-item>
                         <ion-item>
-                            <ion-input name="lastName" type="text" placeholder="Last name" ngModel required></ion-input>
+                            <ion-label position="floating">Last name</ion-label>
+                            <ion-input formControlName="lastName" type="text" placeholder="Last name"></ion-input>
                         </ion-item>
                         <ion-item>
-                            <ion-input name="username" type="text" placeholder="Username" ngModel required></ion-input>
+                            <ion-label position="floating">Username</ion-label>
+                            <ion-input formControlName="username" type="text" placeholder="Username"></ion-input>
                         </ion-item>
+                        <small class="error ion-padding" style="color: #c10000"
+                               *ngIf="errorControl.username.errors?.required">
+                            Username is required.
+                        </small>
                         <ion-item>
-                            <ion-input name="email" type="email" placeholder="your@email.com" ngModel
-                                       required></ion-input>
+                            <ion-label position="floating">Email</ion-label>
+                            <ion-input formControlName="email" type="email"
+                                       placeholder="your@email.com"></ion-input>
                         </ion-item>
+                        <small class="error ion-padding" style="color: #c10000"
+                               *ngIf="errorControl.email.errors?.email">
+                            Email is in wrong format.
+                        </small>
+                        <small class="error ion-padding" style="color: #c10000"
+                               *ngIf="errorControl.email.errors?.required">
+                            Email is required.
+                        </small>
                         <ion-item>
-                            <ion-input name="password" type="password" placeholder="Password" ngModel
-                                       required></ion-input>
+                            <ion-label position="floating">Password</ion-label>
+                            <ion-input formControlName="password" type="password"
+                                       placeholder="Password"></ion-input>
                         </ion-item>
+                        <small class="error ion-padding" style="color: #c10000"
+                               *ngIf="errorControl.password.errors?.required">
+                            Password is required.
+                        </small>
                     </div>
                     <div class="ion-margin-top ion-padding">
-                        <ion-button color="success" type="submit" [disabled]="form.invalid" expand="block">Register
+                        <ion-button color="success" type="submit" (click)="register()" [disabled]="form.invalid"
+                                    expand="block">Register
                         </ion-button>
                     </div>
                 </ion-col>
@@ -40,8 +62,11 @@
         <ion-row>
             <ion-col>
                 <div class="ion-text-center">
-                    <h5>All ready have an account?</h5>
-                    <ion-button class="ion-padding ion-margin-start ion-margin-end" color="medium" expand="block"
+                    <h6>Already have an account?</h6>
+                    <ion-button class="ion-padding ion-margin-start ion-margin-end"
+                                fill="outline"
+                                color="primary"
+                                expand="block"
                                 [routerLink]="[ '/', 'login' ]">
                         Login
                     </ion-button>

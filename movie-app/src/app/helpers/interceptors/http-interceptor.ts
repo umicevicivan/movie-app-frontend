@@ -20,7 +20,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
                 },
             });
         }
-        if (request.url.includes('localhost')) {
+        if (request.url.includes('localhost') && !request.url.includes('/register')) {
             request = request.clone({
                 setParams: {
                     access_token: this.auth.getToken(),

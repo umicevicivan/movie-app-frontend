@@ -31,4 +31,8 @@ export class ApplicationService {
     addMovie(wrapper: MovieListWrapperModal): Observable<any> {
         return this.http.post('http://localhost:8080/api/list/add-movie', wrapper);
     }
+
+    fetchAddedLists(apiId: number): Observable<ListModel[]> {
+        return this.http.get<ListModel[]>(`http://localhost:8080/api/list/${apiId}`);
+    }
 }

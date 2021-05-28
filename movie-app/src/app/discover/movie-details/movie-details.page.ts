@@ -26,8 +26,10 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
     private credits: BehaviorSubject<Credits> = new BehaviorSubject(null);
     private similarMovies: BehaviorSubject<DiscoverMovies> = new BehaviorSubject(null);
     private lists: BehaviorSubject<ListModel[]> = new BehaviorSubject([]);
+    private addedLists: BehaviorSubject<ListModel[]> = new BehaviorSubject([]);
 
     lists$: Observable<ListModel[]> = this.lists.asObservable();
+    addedLists$: Observable<ListModel[]> = this.addedLists.asObservable();
     movie$: Observable<Movie> = this.movie.asObservable();
     imdbMovie$: Observable<IMDBMovie> = this.imdbMovie.asObservable();
     credits$: Observable<Credits> = this.credits.asObservable();
@@ -58,6 +60,7 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
         this.getIMDBStats(this.movie.getValue().imdb_id);
         this.calculateRunTimeandReleaseDate();
         this.createInputs();
+        this.fetchAddedLists(this.movie.getValue().id);
     }
 
     ngOnDestroy(): void {
@@ -159,28 +162,37 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
     }
 
     addMovieToList(apiId: number): void {
-        const wrapper: MovieListWrapperModal = new MovieListWrapperModal();
-        wrapper.movieApiKey = apiId;
-        this.presentAlertCheckbox(wrapper);
+        this.presentAlertCheckbox(apiId);
     }
 
     private createInputs() {
         this.applicationService.fetchLists().subscribe(res => {
             this.lists.next(res);
+            const added = this.addedLists.getValue();
             this.lists.getValue().forEach(item => {
+                let checked = false;
+                if (added.some(list => list.name === item.name)) {
+                    checked = true;
+                }
                 this.inputs.push(
                     {
                         type: 'checkbox',
                         label: item.name,
                         value: item.name,
-                        checked: false
+                        checked,
                     }
                 );
             });
         });
     }
 
-    async presentAlertCheckbox(wrapper: MovieListWrapperModal) {
+    private fetchAddedLists(apiId: number): void {
+        this.applicationService.fetchAddedLists(apiId).subscribe(res => {
+            this.addedLists.next(res);
+        });
+    }
+
+    async presentAlertCheckbox(apiId: number) {
         const alert = await this.alertController.create({
             header: 'Chose movie list',
             inputs: this.inputs,
@@ -195,9 +207,19 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
                 }, {
                     text: 'Ok',
                     handler: (data) => {
-                        wrapper.listName = data[0];
-                        this.applicationService.addMovie(wrapper).subscribe(res => {
-                            alert.dismiss(null);
+                        data.forEach(listName => {
+                            // Not smart logic, implement so multiple lists can be send at the same time
+                            // implement remove
+                            if (this.addedLists.getValue().some(list => list.name === listName)) {
+                                return;
+                            }
+                            const wrapper: MovieListWrapperModal = new MovieListWrapperModal();
+                            wrapper.movieApiKey = apiId;
+                            wrapper.listName = listName;
+                            console.log(wrapper);
+                            this.applicationService.addMovie(wrapper).subscribe(res => {
+                                alert.dismiss(null);
+                            });
                         });
                     }
                 }
