@@ -31,6 +31,6 @@ export class ApplicationService {
     }
 
     fetchAddedLists(apiId: number): Observable<ListModel[]> {
-        return this.http.get<ListModel[]>(`http://localhost:8080/api/list/${apiId}`);
+        return this.http.get<ListModel[]>(`http://localhost:8080/api/list/list-appearance/${apiId}`);
     }
 }

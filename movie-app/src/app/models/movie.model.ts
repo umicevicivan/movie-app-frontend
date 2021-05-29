@@ -4,7 +4,9 @@ import { ProductionCountry } from '../models/production-countrie.model';
 
 export class Movie {
     id: number;
+    apiId: number;
     poster_path: string;
+    posterUrl: string;
     original_title: string;
     title: string;
     release_date: string;

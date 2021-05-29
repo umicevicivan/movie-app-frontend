@@ -15,6 +15,7 @@ import { ListModel } from '../../models/list.model';
 import { ApplicationService } from '../../services/application.service';
 import { MovieListWrapperModal } from '../../models/movie-list-wrapper.modal';
 import { AlertService } from '../../services/alert.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
     selector: 'app-movie-details',
@@ -53,7 +54,8 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
         private loadingCtrl: LoadingController, private tts: TextToSpeech,
         private applicationService: ApplicationService,
         private alertController: AlertController,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private toastService: ToastService
     ) {
     }
 
@@ -61,7 +63,6 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
         this.movie.next(this.route.snapshot.data.movie);
         this.getIMDBStats(this.movie.getValue().imdb_id);
         this.calculateRunTimeandReleaseDate();
-        this.fetchAddedLists(this.movie.getValue().id);
     }
 
     ngOnDestroy(): void {
@@ -164,6 +165,7 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
 
     private createInputs() {
         const added = this.addedLists.getValue();
+        this.inputs = [];
         this.lists.getValue().forEach(item => {
             let checked = false;
             if (added.some(list => list.name === item.name)) {
@@ -187,17 +189,13 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
                 return;
             }
             this.lists.next(res);
-            this.createInputs();
-            this.presentAlertCheckbox(apiId);
+            this.applicationService.fetchAddedLists(apiId).subscribe(res => {
+                this.addedLists.next(res);
+                this.createInputs();
+                this.presentAlertCheckbox(apiId);
+            });
         });
     }
-
-    private fetchAddedLists(apiId: number): void {
-        this.applicationService.fetchAddedLists(apiId).subscribe(res => {
-            this.addedLists.next(res);
-        });
-    }
-
 
     async presentAlertCheckbox(apiId: number) {
         const alert = await this.alertController.create({
@@ -223,8 +221,8 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
                             const wrapper: MovieListWrapperModal = new MovieListWrapperModal();
                             wrapper.movieApiKey = apiId;
                             wrapper.listName = listName;
-                            console.log(wrapper);
                             this.applicationService.addMovie(wrapper).subscribe(res => {
+                                this.toastService.success(`Movie successfully added to list ${listName}!`);
                                 alert.dismiss(null);
                             });
                         });

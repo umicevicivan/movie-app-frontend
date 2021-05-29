@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ApplicationService } from '../../services/application.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
     selector: 'app-new-list-modal',
@@ -14,8 +15,8 @@ export class NewListModalComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private modalController: ModalController, private applicationSerivce: ApplicationService,
-                private router: Router, private alertService: AlertService) {
+    constructor(private modalController: ModalController, private applicationService: ApplicationService,
+                private router: Router, private alertService: AlertService, private toastService: ToastService) {
         this.form = new FormGroup({
             name: new FormControl(null),
         });
@@ -31,7 +32,8 @@ export class NewListModalComponent implements OnInit {
     }
 
     createList(): void {
-        this.applicationSerivce.createList(this.form.get('name').value).subscribe(res => {
+        this.applicationService.createList(this.form.get('name').value).subscribe(res => {
+            this.toastService.success('Successfully created new movie list!');
             this.router.navigate(['/tabs/lists']);
             this.dismiss();
         }, (error) => {

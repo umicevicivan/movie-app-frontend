@@ -4,6 +4,7 @@ import { UserModel } from '../models/user.model';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { AlertService } from './alert.service';
+import { ToastService } from './toast.service';
 
 
 @Injectable({
@@ -14,7 +15,8 @@ export class AuthService {
     constructor(private http: HttpClient,
                 private cookieService: CookieService,
                 private router: Router,
-                private alertService: AlertService) {
+                private alertService: AlertService,
+                private toastService: ToastService) {
     }
 
     login(form) {
@@ -40,10 +42,10 @@ export class AuthService {
             .subscribe(
                 (data: any) => {
                     localStorage.setItem('token', data.access_token);
-                    // this.cookieService.set('token', data.access_token);
                     setTimeout(() => {
                         this.router.navigate(['/tabs']);
                     }, 1000);
+                    this.toastService.success('Successfully logged in!');
                 },
                 err => this.alertService.warning('Login failed', 'Check if username and password are correct.'));
     }

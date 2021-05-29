@@ -1,24 +1,28 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar *ngIf="list$|async as list">
         <ion-buttons slot="start">
             <ion-back-button defaultHref="/tabs/lists"></ion-back-button>
         </ion-buttons>
-        <ion-title>List 1</ion-title>
+        <ion-title>{{list.name}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ng-template>
-        <ion-grid fixed *ngIf="list$|async as list">
-            <ion-row class="ion-text-center">
+    <div *ngIf="moviesEmpty$|async;else movies" class="ion-padding ion-text-center">
+        <h1>:(</h1>
+        <h2>There are no movies added to this list.</h2>
+    </div>
+    <ng-template #movies>
+        <ion-grid fixed>
+            <ion-row class="ion-text-center" *ngIf="list$|async as list">
                 <ion-col
                         size="4"
                         *ngFor="let movie of list.movies"
-                        [routerLink]="[ '/', 'tabs','discover','movie', movie.id ]"
+                        [routerLink]="[ '/', 'tabs','discover','movie', movie.apiId ]"
                 >
                     <ion-img
                             class="border-radius"
-                            [src]="imageBaseUrl + movie.poster_path"
+                            [src]="imageBaseUrl + movie.posterUrl"
                     ></ion-img>
                     <ion-label>
                         <p class="smovie-label">{{ movie.title }}</p>
