@@ -4,6 +4,7 @@ import { ListModel } from '../../models/list.model';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { map } from 'rxjs/operators';
+import { ApplicationService } from '../../services/application.service';
 
 @Component({
     selector: 'app-list-details',
@@ -19,7 +20,7 @@ export class ListDetailsPage implements OnInit, OnDestroy {
 
     imageBaseUrl = environment.imageBaseUrl;
 
-    constructor(private route: ActivatedRoute) {
+    constructor(private route: ActivatedRoute, private aplicationService: ApplicationService) {
     }
 
     ngOnInit() {
@@ -28,6 +29,10 @@ export class ListDetailsPage implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.list.complete();
+    }
+
+    generateQRCode(listName: string): void {
+
     }
 
 }

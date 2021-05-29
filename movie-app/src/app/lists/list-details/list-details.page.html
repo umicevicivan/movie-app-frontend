@@ -4,6 +4,11 @@
             <ion-back-button defaultHref="/tabs/lists"></ion-back-button>
         </ion-buttons>
         <ion-title>{{list.name}}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="generateQRCode(list.name)">
+                <ion-icon name="qr-code-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
