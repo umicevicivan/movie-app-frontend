@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonSearchbar } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { DiscoverMovies } from 'src/app/models/discover-movies.model';
-import { TmdbService } from 'src/app/services/tmdb.service';
+import { TMDBMoviesWrapper } from 'src/app/core/api/movies/movie';
+import { TmdbService } from 'src/app/core/api/movies/tmdb.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -13,9 +13,9 @@ import { environment } from 'src/environments/environment';
 })
 export class SearchComponent implements OnInit {
 
-    private discoverMovies: BehaviorSubject<DiscoverMovies> = new BehaviorSubject(null);
+    private discoverMovies: BehaviorSubject<TMDBMoviesWrapper> = new BehaviorSubject(null);
 
-    discoverMovies$: Observable<DiscoverMovies> = this.discoverMovies.asObservable();
+    discoverMovies$: Observable<TMDBMoviesWrapper> = this.discoverMovies.asObservable();
 
 
     @ViewChild('searchbar') searchbar: IonSearchbar;

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ApplicationService } from '../../services/application.service';
+import { MovieListsService } from '../../core/api/movie-lists/movie-lists.service';
 import { Router } from '@angular/router';
-import { AlertService } from '../../services/alert.service';
-import { ToastService } from '../../services/toast.service';
+import { NotifyService } from '../../core/util/notify.service';
 
 @Component({
     selector: 'app-new-list-modal',
@@ -15,8 +14,8 @@ export class NewListModalComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private modalController: ModalController, private applicationService: ApplicationService,
-                private router: Router, private alertService: AlertService, private toastService: ToastService) {
+    constructor(private modalController: ModalController, private applicationService: MovieListsService,
+                private router: Router, private notifyService: NotifyService) {
         this.form = new FormGroup({
             name: new FormControl(null),
         });
@@ -32,12 +31,12 @@ export class NewListModalComponent implements OnInit {
     }
 
     createList(): void {
-        this.applicationService.createList(this.form.get('name').value).subscribe(res => {
-            this.toastService.success('Successfully created new movie list!');
+        this.applicationService.create(this.form.get('name').value).subscribe(res => {
+            this.notifyService.success('Successfully created new movie list!');
             this.router.navigate(['/tabs/lists']);
             this.dismiss();
         }, (error) => {
-            this.alertService.warning('Failed to create new list', error.error.apierror.message);
+            this.notifyService.alert('Failed to create new list', '', error.error.apierror.message);
         });
     }
 }

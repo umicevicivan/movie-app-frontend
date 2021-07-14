@@ -5,9 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { ListsPage } from './lists.page';
 
 import { ListsPageRoutingModule } from './lists-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     imports: [
+        SharedModule,
         IonicModule,
         CommonModule,
         FormsModule,

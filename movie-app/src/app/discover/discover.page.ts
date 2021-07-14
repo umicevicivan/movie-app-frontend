@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { TmdbService } from '../services/tmdb.service';
+import { TmdbService } from '../core/api/movies/tmdb.service';
 import { IonInfiniteScroll, ModalController } from '@ionic/angular';
-import { Movie } from '../models/movie.model';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Movie } from '../core/api/movies/movie';
 
 @Component({
     selector: 'app-discover',
@@ -42,7 +42,7 @@ export class DiscoverPage {
     }
 
     loadDiscoverMovies(page: number) {
-        this.tmdbService.getDiscoverMovies(page).subscribe(
+        this.tmdbService.find(page).subscribe(
             (res) => {
                 let movies = this.movies.getValue();
                 movies.push.apply(movies, res.results);

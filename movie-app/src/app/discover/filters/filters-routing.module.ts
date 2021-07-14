@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FilteredMoviesResolver } from 'src/app/helpers/resolvers/filtered.movies.resolver';
+import { FilteredMoviesResolver } from 'src/app/core/resolvers/filtered.movies.resolver';
 import { FiltersPage } from './filters.page';
 
 const routes: Routes = [

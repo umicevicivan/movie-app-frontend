@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { NewListModalComponent } from './new-list-modal/new-list-modal.component';
-import { ApplicationService } from '../services/application.service';
+import { MovieListsService } from '../core/api/movie-lists/movie-lists.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ListModel } from '../models/list.model';
+import { MovieList } from '../core/api/movies/movie';
 
 @Component({
     selector: 'app-lists',
@@ -12,11 +12,11 @@ import { ListModel } from '../models/list.model';
 })
 export class ListsPage implements OnInit, OnDestroy {
 
-    private lists: BehaviorSubject<ListModel[]> = new BehaviorSubject([]);
+    private lists: BehaviorSubject<MovieList[]> = new BehaviorSubject([]);
 
-    lists$: Observable<ListModel[]> = this.lists.asObservable();
+    lists$: Observable<MovieList[]> = this.lists.asObservable();
 
-    constructor(public modalController: ModalController, private applicationService: ApplicationService) {
+    constructor(public modalController: ModalController, private applicationService: MovieListsService) {
     }
 
     ionViewWillEnter(): void {
@@ -46,7 +46,7 @@ export class ListsPage implements OnInit, OnDestroy {
     }
 
     fetchLists(): void {
-        this.applicationService.fetchLists().subscribe(res => {
+        this.applicationService.find().subscribe(res => {
             this.lists.next(res);
         });
     }

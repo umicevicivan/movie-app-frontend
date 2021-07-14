@@ -6,9 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { OptionsPage } from './options.page';
 
 import { OptionsPageRoutingModule } from './options-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     imports: [
+        SharedModule,
         IonicModule,
         CommonModule,
         FormsModule,

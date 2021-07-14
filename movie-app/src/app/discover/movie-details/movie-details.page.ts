@@ -2,20 +2,15 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 
-import { Movie } from 'src/app/models/movie.model';
-import { TmdbService } from 'src/app/services/tmdb.service';
+import { TmdbService } from 'src/app/core/api/movies/tmdb.service';
 import { environment } from 'src/environments/environment';
 import { ScrollDetail } from '@ionic/core';
-import { IMDBMovie } from 'src/app/models/imdb-movie.model';
-import { Credits } from 'src/app/models/credits.model';
-import { DiscoverMovies } from 'src/app/models/discover-movies.model';
+import { IMDBMovie, Movie, MovieCredits, MovieList, MovieListWrapperModal, TMDBMoviesWrapper } from 'src/app/core/api/movies/movie';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
-import { ListModel } from '../../models/list.model';
-import { ApplicationService } from '../../services/application.service';
-import { MovieListWrapperModal } from '../../models/movie-list-wrapper.modal';
-import { AlertService } from '../../services/alert.service';
-import { ToastService } from '../../services/toast.service';
+import { MovieListsService } from '../../core/api/movie-lists/movie-lists.service';
+import { NotifyService } from '../../core/util/notify.service';
+import { ImdbService } from '../../core/api/movies/imdb.service';
 
 @Component({
     selector: 'app-movie-details',
@@ -25,17 +20,17 @@ import { ToastService } from '../../services/toast.service';
 export class MovieDetailsPage implements OnInit, OnDestroy {
     private movie: BehaviorSubject<Movie> = new BehaviorSubject(null);
     private imdbMovie: BehaviorSubject<IMDBMovie> = new BehaviorSubject(null);
-    private credits: BehaviorSubject<Credits> = new BehaviorSubject(null);
-    private similarMovies: BehaviorSubject<DiscoverMovies> = new BehaviorSubject(null);
-    private lists: BehaviorSubject<ListModel[]> = new BehaviorSubject([]);
-    private addedLists: BehaviorSubject<ListModel[]> = new BehaviorSubject([]);
+    private credits: BehaviorSubject<MovieCredits> = new BehaviorSubject(null);
+    private similarMovies: BehaviorSubject<TMDBMoviesWrapper> = new BehaviorSubject(null);
+    private lists: BehaviorSubject<MovieList[]> = new BehaviorSubject([]);
+    private addedLists: BehaviorSubject<MovieList[]> = new BehaviorSubject([]);
 
-    lists$: Observable<ListModel[]> = this.lists.asObservable();
-    addedLists$: Observable<ListModel[]> = this.addedLists.asObservable();
+    lists$: Observable<MovieList[]> = this.lists.asObservable();
+    addedLists$: Observable<MovieList[]> = this.addedLists.asObservable();
     movie$: Observable<Movie> = this.movie.asObservable();
     imdbMovie$: Observable<IMDBMovie> = this.imdbMovie.asObservable();
-    credits$: Observable<Credits> = this.credits.asObservable();
-    similarMovies$: Observable<DiscoverMovies> = this.similarMovies.asObservable();
+    credits$: Observable<MovieCredits> = this.credits.asObservable();
+    similarMovies$: Observable<TMDBMoviesWrapper> = this.similarMovies.asObservable();
 
     isDataAvailable = true;
     imageBaseUrl = environment.imageBaseUrl;
@@ -50,12 +45,12 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
 
     constructor(
         private tmdbService: TmdbService,
+        private imdbService: ImdbService,
         private route: ActivatedRoute,
         private loadingCtrl: LoadingController, private tts: TextToSpeech,
-        private applicationService: ApplicationService,
+        private applicationService: MovieListsService,
         private alertController: AlertController,
-        private alertService: AlertService,
-        private toastService: ToastService
+        private notifyService: NotifyService,
     ) {
     }
 
@@ -78,7 +73,7 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
     }
 
     getIMDBStats(imdbid: string) {
-        this.tmdbService.getIMDBMovie(imdbid).subscribe((res) => {
+        this.imdbService.findById(imdbid).subscribe((res) => {
             this.imdbMovie.next(res);
         });
     }
@@ -183,14 +178,14 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
     }
 
     addMovieToList(apiId: number): void {
-        this.applicationService.fetchLists().subscribe(res => {
+        this.applicationService.find().subscribe(res => {
             if (res && res.length === 0) {
-                this.alertService.warning('No movie lists!', 'Please create at least one movie list.');
+                this.notifyService.alert('No movie lists!', 'Please create at least one movie list.', 'Click OK to continue');
                 return;
             }
             this.lists.next(res);
-            this.applicationService.fetchAddedLists(apiId).subscribe(res => {
-                this.addedLists.next(res);
+            this.applicationService.fetchAddedLists(apiId).subscribe(lists => {
+                this.addedLists.next(lists);
                 this.createInputs();
                 this.presentAlertCheckbox(apiId);
             });
@@ -222,7 +217,7 @@ export class MovieDetailsPage implements OnInit, OnDestroy {
                             wrapper.movieApiKey = apiId;
                             wrapper.listName = listName;
                             this.applicationService.addMovie(wrapper).subscribe(res => {
-                                this.toastService.success(`Movie successfully added to list ${listName}!`);
+                                this.notifyService.success(`Movie successfully added to list ${listName}!`);
                                 alert.dismiss(null);
                             });
                         });

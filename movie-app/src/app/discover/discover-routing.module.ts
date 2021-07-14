@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MovieResolver } from '../helpers/resolvers/movie.resolver';
+import { MovieResolver } from '../core/resolvers/movie.resolver';
 import { DiscoverPage } from './discover.page';
 import { SearchComponent } from './search/search.component';
 

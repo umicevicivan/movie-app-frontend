@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Movie } from 'src/app/models/movie.model';
-import { TmdbService } from 'src/app/services/tmdb.service';
+import { TmdbService } from 'src/app/core/api/movies/tmdb.service';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { DiscoverMovies } from 'src/app/models/discover-movies.model';
+import { Movie, TMDBMoviesWrapper } from 'src/app/core/api/movies/movie';
 
 @Component({
     selector: 'app-custom',
@@ -15,10 +14,10 @@ import { DiscoverMovies } from 'src/app/models/discover-movies.model';
 export class CustomPage implements OnInit {
 
     private movies: BehaviorSubject<Movie[]> = new BehaviorSubject([]);
-    private response: BehaviorSubject<DiscoverMovies> = new BehaviorSubject(null);
+    private response: BehaviorSubject<TMDBMoviesWrapper> = new BehaviorSubject(null);
 
     movies$: Observable<Movie[]> = this.movies.asObservable();
-    response$: Observable<DiscoverMovies> = this.response.asObservable();
+    response$: Observable<TMDBMoviesWrapper> = this.response.asObservable();
     moviesEmpty$: Observable<boolean> = this.movies$.pipe(map(movies => !movies || movies.length === 0));
 
     imageBaseUrl = environment.imageBaseUrl;

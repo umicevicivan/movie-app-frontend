@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ListsPage } from './lists.page';
-import { ListResolver } from '../helpers/resolvers/list.resolver';
+import { ListResolver } from '../core/resolvers/list.resolver';
 
 const routes: Routes = [
     {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Filters } from 'src/app/models/filters.model';
-import { TmdbService } from 'src/app/services/tmdb.service';
+import { MovieFilters, TmdbService } from 'src/app/core/api/movies/tmdb.service';
 
 @Component({
     selector: 'app-filters',
@@ -11,7 +10,7 @@ import { TmdbService } from 'src/app/services/tmdb.service';
 export class FiltersPage implements OnInit {
     maxYear: number;
     form: FormGroup;
-    filters: Filters;
+    filters: MovieFilters;
     segmentValue = 'desc';
     fromMinYear: number;
     fromMaxYear: number;
